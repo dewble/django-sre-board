@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'taggit',
+    'accounts.apps.AccountsConfig',  # blog.apps.py 에서 정의
     'blog.apps.BlogConfig',  # blog.apps.py 에서 정의
 ]
 
@@ -135,3 +136,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TAGGIT_CASE_INSENSITIVE = True
+
+AUTH_USER_MODEL = 'accounts.User' ## 테이블 등록할 땐 app 이름과 모델이름을 같이 써주면 된다
