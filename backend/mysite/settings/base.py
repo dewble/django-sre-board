@@ -13,19 +13,19 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h^@rpdw7(35j5(q)tpfk-d4t6w!hmo^$&8kpqdyw^pb1^o2chv'
+#SECRET_KEY = 'django-insecure-h^@rpdw7(35j5(q)tpfk-d4t6w!hmo^$&8kpqdyw^pb1^o2chv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -77,20 +77,20 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog',  # DB name
-        'USER': 'blog',  # DB account
-        'PASSWORD': 'blog123!@#',  # DB account's password
-        'HOST': '127.0.0.1',  # DB address(IP)
-        'PORT': '3306',  # DB port(normally 3306)
-    }
-}
+# DATABASES = {
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.sqlite3',
+#     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     # }
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'blog',  # DB name
+#         'USER': 'blog',  # DB account
+#         'PASSWORD': 'blog123!@#',  # DB account's password
+#         'HOST': '127.0.0.1',  # DB address(IP)
+#         'PORT': '3306',  # DB port(normally 3306)
+#     }
+# }
 
 
 # Password validation
@@ -128,8 +128,11 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+# frontend에서 지정하는 static 파일과 아래 경로를 맞춰야한다.
 STATIC_URL = '/static/'
 
+# 아래에서 지정하는 project static dir, 1순위로 찾아본다
+# 2순위로 각 앱 폴더 하위의 static 폴더를 찾아보게 된다
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
