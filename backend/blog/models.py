@@ -1,9 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
-
-# Create your models here.
 from taggit.managers import TaggableManager
+
 
 
 class Post(models.Model):

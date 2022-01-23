@@ -22,3 +22,18 @@ def obj_to_post(obj):
     del post['_state']
 
     return post
+
+def prev_next_post(obj):
+    # 이전 포스트가 없을 경우 error가 발생할 수 있다. try-except
+    try:
+        prevObj = obj.get_prev()
+        prevDict = {'id': prevObj.id, 'title': prevObj.title}
+    except obj.DoesNotExist as e: #Post.DoesNotExist:
+        prevDict = {}
+    try:
+        nextObj = obj.get_next()
+        nextDict = {'id': nextObj.id, 'title': nextObj.title}
+    except obj.DoesNotExist as e:
+        nextDict = {}
+
+    return prevDict, nextDict
