@@ -24,6 +24,9 @@
       <v-spacer></v-spacer>
 
       <v-btn text href="/">HOME</v-btn>
+      <v-btn text href="/blog/post/list">Blog</v-btn>
+      <v-btn text href="/admin">Admin</v-btn>
+ 
       <v-btn text href="/post_list.html">POST LIST</v-btn>
       <v-btn text href="/post_detail.html">POST Detail</v-btn>
 
