@@ -8,28 +8,13 @@
       :items-per-page="5"
     >
       <template v-slot:top>
-        <v-toolbar
-          flat
-        >
+        <v-toolbar flat>
           <v-toolbar-title>Post List</v-toolbar-title>
-          <v-divider 
-            class="mx-4"
-            inset
-            vertical
-          ></v-divider>
+          <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog
-            v-model="dialog"
-            max-width="500px"
-          >
+          <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-              >
+              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                 New Item
               </v-btn>
             </template>
@@ -37,156 +22,112 @@
               <v-card-title>
                 <span class="text-h5">{{ formTitle }}</span>
               </v-card-title>
-  
+
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
+                    <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.name"
                         label="Dessert name"
                       ></v-text-field>
                     </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
+                    <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.calories"
                         label="Calories"
                       ></v-text-field>
                     </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
+                    <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.fat"
                         label="Fat (g)"
                       ></v-text-field>
                     </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
+                    <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.carbs"
                         label="Carbs (g)"
                       ></v-text-field>
                     </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="editedItem.protein"
-                        label="Protein (g)"
-                      ></v-text-field>
-                    </v-col>
+
                   </v-row>
                 </v-container>
               </v-card-text>
-  
+
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="close"
-                >
+                <v-btn color="blue darken-1" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="save"
-                >
-                  Save
-                </v-btn>
+                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
-              <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+              <v-card-title class="text-h5"
+                >Are you sure you want to delete this item?</v-card-title
+              >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                <v-btn color="blue darken-1" text @click="closeDelete"
+                  >Cancel</v-btn
+                >
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                  >OK</v-btn
+                >
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
-            <template v-slot:[`item.actions`]="{ item }">
-      <!-- <template v-slot:item.actions="{ item }"> -->
-        <v-icon
-          small
-          class="mr-2"
-          @click="editItem(item)"
-        >
-          mdi-pencil
-        </v-icon>
-        <v-icon
-          small
-          @click="deleteItem(item)"
-        >
-          mdi-delete
-        </v-icon>
+      <template v-slot:[`item.actions`]="{ item }">
+        <!-- <template v-slot:item.actions="{ item }"> -->
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn
-          color="primary"
-          @click="initialize"
-        >
-          Reset
-        </v-btn>
+        <v-btn color="primary" @click="fetchPostList"> Reset </v-btn>
       </template>
     </v-data-table>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "HelloWorld",
-
 
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: 'ID',
-        align: 'start',
+        text: "ID",
+        align: "start",
         sortable: false,
-        value: 'name',
+        value: "name",
       },
-      { text: '제목', value: 'calories' },
-      { text: '요약', value: 'fat' },
-      { text: '수정일', value: 'carbs' },
-      { text: '작성자', value: 'protein' },
-      { text: 'Actions', value: 'actions', sortable: false },
+      { text: "제목", value: "title" },
+      { text: "요약", value: "description" },
+      { text: "수정일", value: "modify_dt" },
+      { text: "작성자", value: "owner" },
+      { text: "Actions", value: "actions", sortable: false },
     ],
     posts: [],
     editedIndex: -1,
     editedItem: {
-      name: '',
+      name: "",
       calories: 0,
       fat: 0,
       carbs: 0,
       protein: 0,
     },
     defaultItem: {
-      name: '',
+      name: "",
       calories: 0,
       fat: 0,
       carbs: 0,
@@ -195,91 +136,81 @@ export default {
   }),
 
   computed: {
-    formTitle () {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
   },
 
   watch: {
-    dialog (val) {
-      val || this.close()
+    dialog(val) {
+      val || this.close();
     },
-    dialogDelete (val) {
-      val || this.closeDelete()
+    dialogDelete(val) {
+      val || this.closeDelete();
     },
   },
 
-  created () {
-    this.initialize()
+  created() {
+    this.fetchPostList();
   },
 
   methods: {
-    initialize () {
-      this.posts = [
-        {
-          name: '1',
-          calories: 'django vuejs board',
-          fat: '요약',
-          carbs: '2022-01-18',
-          protein: 'dewble',
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-      ]
+    fetchPostList() {
+      console.log("fetchPostList()...");
+
+      axios
+        .get("/api/post/list/")
+        .then((res) => {
+          // 화살표 함수를 사용해야 this가 에러가 안난다
+          console.log("POST GET RES", res);
+          this.posts = res.data;
+        })
+        .catch((err) => {
+          console.log("POST GET ERR>RESPONSE", err.response);
+          alert(err.response.status + " " + err.response.statusText);
+        });
     },
 
-    editItem (item) {
-      this.editedIndex = this.posts.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
+    editItem(item) {
+      this.editedIndex = this.posts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
 
-    deleteItem (item) {
-      this.editedIndex = this.posts.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
+    deleteItem(item) {
+      this.editedIndex = this.posts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
     },
 
-    deleteItemConfirm () {
-      this.desserts.splice(this.editedIndex, 1)
-      this.closeDelete()
+    deleteItemConfirm() {
+      this.desserts.splice(this.editedIndex, 1);
+      this.closeDelete();
     },
 
-    close () {
-      this.dialog = false
+    close() {
+      this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
     },
 
-    closeDelete () {
-      this.dialogDelete = false
+    closeDelete() {
+      this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
     },
 
-    save () {
+    save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem)
+        this.desserts.push(this.editedItem);
       }
-      this.close()
+      this.close();
     },
   },
 };
