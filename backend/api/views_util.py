@@ -28,8 +28,9 @@ def prev_next_post(obj):
     try:
         prevObj = obj.get_prev()
         prevDict = {'id': prevObj.id, 'title': prevObj.title}
-    except obj.DoesNotExist as e: #Post.DoesNotExist:
+    except obj.DoesNotExist as e:
         prevDict = {}
+
     try:
         nextObj = obj.get_next()
         nextDict = {'id': nextObj.id, 'title': nextObj.title}
@@ -37,3 +38,31 @@ def prev_next_post(obj):
         nextDict = {}
 
     return prevDict, nextDict
+
+def make_tag_cloud(qsTag):
+    minCount = min(tag.count for tag in qsTag)
+    maxCount = max(tag.count for tag in qsTag)
+
+    def get_weight_func(minWeight, maxWeight):
+        if minCount == maxCount:
+            factor = 1.0
+        else:
+            factor = (maxWeight - minWeight) / (maxCount - minCount)
+
+        def func(count):
+            weight = round(minWeight + (factor * (count - minCount)))
+            return weight
+
+        return func
+
+    weight_func = get_weight_func(1, 5)
+    tagList = []
+    for tag in qsTag:
+        weight = weight_func(tag.count)
+        tagList.append({
+            'name': tag.name,
+            'count': tag.count,
+            'weight': weight,
+        })
+
+    return tagList

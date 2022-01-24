@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -6,7 +7,8 @@ from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
 from taggit.models import Tag
 
-from api.views_util import obj_to_post, prev_next_post
+from api.views_util import obj_to_post, prev_next_post, make_tag_cloud
+
 from blog.models import Post
 
 '''
@@ -37,17 +39,22 @@ class ApiPostDV(BaseDetailView):
         return JsonResponse(data=post, safe=True, status=200)
 
 class ApiTagCloudLV(BaseListView):
-    model = Tag
+    # model = Tag
+    queryset = Tag.objects.annotate(count=Count('post'))
+    # def get_queryset(self):
+    #     return Tag.objects.all()
 
     def render_to_response(self, context, **response_kwargs):
         qs = context['object_list']
-        # 쿼리셋에 있는 각 오브젝트들을 ojb to post 로넘겨서 직렬화 수행
         # postList = [obj_to_post(obj) for obj in qs]
-        tagList = []
-        for obj in qs:
-            tagList.append({
-                'name': obj.name,
-            })
-
+        # tagList = []
+        # for obj in qs:
+        #     tagList.append({
+        #         'name': obj.name,
+        #         # 'count': obj.name,
+        #         # 'weight': obj.name,
+        #     })
+        tagList = make_tag_cloud(qs)
         return JsonResponse(data=tagList, safe=False, status=200)
+
 

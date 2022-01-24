@@ -52,10 +52,11 @@
             v-for="(tag, index) in tagCloud"
             :key="index"
             class="ma-2"
-            color="green"
+            :color="tag.color"
             text-color="white"
           >
-            <v-avatar left class="green darken-4"> 1 </v-avatar>{{ tag.name }}
+            <v-avatar left :class="tag.color + ' darken-4'">{{ tag.count }}</v-avatar
+            >{{ tag.name }}
           </v-chip>
         </v-card>
       </v-col>
@@ -104,6 +105,13 @@ export default {
           console.log("TAG CLOUD GET RES", res);
           this.tagCloud = res.data;
           // tag.weight
+          this.tagCloud.forEach((element) => {
+            if (element.weight === 5) element.color = "purple";
+            else if (element.weight === 4) element.color = "blue";
+            else if (element.weight === 3) element.color = "green";
+            else if (element.weight === 2) element.color = "blue-grey";
+            else if (element.weight === 1) element.color = "grey";
+          });
         })
         .catch((err) => {
           console.log("TAG CLOUD GET ERR>.RESPONSE", err.response);
