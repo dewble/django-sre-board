@@ -14,11 +14,12 @@
           <div>
             <strong>TAGs: </strong>
             <v-chip
-              class="ma-2"
+              class="ma-2 my-hover"
               color=""
               outlined
               v-for="(tag, index) in post.tags"
               :key="index"
+              @click="serverPage(tag)"
             >
               {{ tag }}
             </v-chip>
@@ -49,11 +50,12 @@
         <v-card class="pa-2 mb-5" tile>
           <h2>Tag cloud</h2>
           <v-chip
-            v-for="(tag, index) in tagCloud"
+            v-for="(tag, index) in tagCloud "
             :key="index"
-            class="ma-2"
+            class="ma-2 my-hover"
             :color="tag.color"
             text-color="white"
+            @click="serverPage(tag.name)"
           >
             <v-avatar left :class="tag.color + ' darken-4'">{{ tag.count }}</v-avatar
             >{{ tag.name }}
@@ -77,7 +79,7 @@ export default {
 
   created() {
     console.log("created()...");
-    const postId = 2;
+    const postId = location.pathname.split('/')[3] || 2; 
     this.fetchPostDetail(postId);
     this.fetchTagCloud();
   },
@@ -118,6 +120,11 @@ export default {
           alert(err.response.status + " " + err.response.statusText);
         });
     },
+
+    serverPage(tagname) {
+      console.log("serverPage()...", tagname);
+      location.href = `/blog/post/list/?tagname=${tagname}`;
+    }
   },
 };
 </script>

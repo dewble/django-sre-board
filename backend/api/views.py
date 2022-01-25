@@ -18,7 +18,15 @@ status = 응답코드
 '''
 
 class ApiPostLV(BaseListView):
-    model = Post
+    # model = Post
+
+    def get_queryset(self):
+        tagname = self.request.GET.get('tagname')
+        if tagname:
+            qs = Post.objects.filter(tags__name=tagname) # POST table에서 tags 칼럼중 name이 tagname인 칼럼을 가져오라
+        else:
+            qs = Post.objects.all() ## name이 해당하지 않을 경우 전체를 불러오라
+        return qs
 
     def render_to_response(self, context, **response_kwargs):
         qs = context['object_list']
