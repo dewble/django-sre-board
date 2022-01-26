@@ -7,7 +7,7 @@ module.exports = {
 
   devServer: {
     index: 'home.html', 
-    proxy: 'http://127.0.0.1:8000', // axios request가 오는 경우 이 경로로 전달하라
+    proxy: 'http://127.0.0.1:8000', // xhr only
   },
 
   outputDir: 'dist',

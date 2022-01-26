@@ -172,7 +172,7 @@ export default {
 </script>
 
 <style scoped>
-.v-data-table >>> tbody > tr {
+.v-data-table >>> tbody > tr  {
   cursor: pointer;
 }
 </style>
