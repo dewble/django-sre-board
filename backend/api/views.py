@@ -1,3 +1,5 @@
+from django.contrib.auth import login
+from django.contrib.auth.views import LoginView
 from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -66,3 +68,14 @@ class ApiTagCloudLV(BaseListView):
         return JsonResponse(data=tagList, safe=False, status=200)
 
 
+class ApiLoginView(LoginView):
+    def form_valid(self, form):
+        """Security check complete. Log the user in."""
+        user = form.get_user()
+        login(self.request, form.get_user())
+        userDict= vars(user)
+        del userDict['_state'], userDict['password']
+        return JsonResponse(data=userDict, safe=True, status=200)
+
+    def form_invalid(self, form):
+        return JsonResponse(data=form.errors, safe=True, status=400)

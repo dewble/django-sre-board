@@ -68,7 +68,7 @@
         </v-toolbar>
 
         <v-card-text>
-          <v-form>
+          <v-form id="login-form">
             <v-text-field
               prepend-icon="mdi-account"
               name="username"
@@ -86,8 +86,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="dialog.login = false">Cancel</v-btn>
-          <v-btn color="primary" class="mr-5" @click="dialog.login = false"
+          <v-btn text color="grey" @click="cancel('login')">Cancel</v-btn>
+          <v-btn color="primary" class="mr-5" @click="save('login')"
             >Login</v-btn
           >
         </v-card-actions>
@@ -127,7 +127,9 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="dialog.register = false">Cancel</v-btn>
+          <v-btn text color="grey" @click="dialog.register = false"
+            >Cancel</v-btn
+          >
           <v-btn color="success" class="mr-5" @click="dialog.register = false"
             >Register</v-btn
           >
@@ -179,6 +181,11 @@
 </template>
 
 <script>
+import axios from "axios";
+
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
 export default {
   data: () => ({
     drawer: null,
@@ -187,12 +194,51 @@ export default {
       register: false,
       pwdchg: false,
     },
+    me: {},
     items: [
       { title: "Dashboard", icon: "mdi-view-dashboard" },
       { title: "Photos", icon: "mdi-image" },
       { title: "About", icon: "mdi-help-box" },
     ],
   }),
+
+  methods: {
+    cancel(kind) {
+      console.log("cancel()...", kind);
+      if (kind === "login") this.dialog.login = false;
+      else if (kind === "register") this.dialog.register = false;
+      else if (kind === "pwdchg") this.dialog.pwdchg = false;
+    },
+
+    save(kind) {
+      console.log("save()...", kind);
+      if (kind === "login") {
+        this.login();
+        this.dialog.login = false;
+      } else if (kind === "register") {
+        this.register();
+        this.dialog.register = false;
+      } else if (kind === "pwdchg") {
+        this.pwdchg();
+        this.dialog.pwdchg = false;
+      }
+    },
+    login() {
+      console.log("login()...");
+      const postData = new FormData(document.getElementById("login-form"));
+      axios
+        .post("/api/login/", postData)
+        .then((res) => {
+          console.log("LOGIN POST RES", res);
+          alert(`user ${res.data.username} login success`);
+          this.me = res.data;
+        })
+        .catch((err) => {
+          console.log("LOGIN POST ERR.RESPONSE", err.response);
+          alert("login error");
+        });
+    },
+  },
 };
 </script>
 
