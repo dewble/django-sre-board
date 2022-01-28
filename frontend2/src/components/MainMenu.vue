@@ -42,42 +42,40 @@
         </template>
 
         <v-list>
-          <v-list-item @click="dialog = true">
-          <!-- <v-list-item @click.stop="dialog = true"> -->
+          <v-list-item @click="dialog.login = true">
+            <!-- <v-list-item @click.stop="dialog = true"> -->
             <v-list-item-title>Login</v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item @click="dialog.register = true">
             <v-list-item-title>Register</v-list-item-title>
           </v-list-item>
           <v-list-item>
             <v-list-item-title>Logout</v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item @click="dialog.pwdchg = true">
             <v-list-item-title>Password change</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>
 
-    <!-- dialog -->
-    <v-dialog v-model="dialog" max-width="600">
+    <!-- Login dialog -->
+    <v-dialog v-model="dialog.login" max-width="600">
       <v-card class="elevation-12">
         <v-toolbar color="primary" dark flat>
           <v-toolbar-title>Login form</v-toolbar-title>
           <v-spacer></v-spacer>
-
         </v-toolbar>
 
         <v-card-text>
           <v-form>
             <v-text-field
               prepend-icon="mdi-account"
-              name="login"
-              label="Login"
+              name="username"
+              label="Username"
               type="text"
             ></v-text-field>
             <v-text-field
-              id="password"
               prepend-icon="mdi-lock"
               name="password"
               label="Password"
@@ -88,8 +86,92 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="dialog = false">Cancel</v-btn>
-          <v-btn color="primary" class="mr-5" @click="dialog = false">Login</v-btn>
+          <v-btn text color="grey" @click="dialog.login = false">Cancel</v-btn>
+          <v-btn color="primary" class="mr-5" @click="dialog.login = false"
+            >Login</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- register dialog -->
+    <v-dialog v-model="dialog.register" max-width="600">
+      <v-card class="elevation-12">
+        <v-toolbar color="success" dark flat>
+          <v-toolbar-title>Register form</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              prepend-icon="mdi-account"
+              name="username1"
+              label="Username"
+              type="text"
+            ></v-text-field>
+            <v-text-field
+              prepend-icon="mdi-lock"
+              name="password1"
+              label="Password"
+              type="password"
+            ></v-text-field>
+            <v-text-field
+              prepend-icon="mdi-lock"
+              name="password2"
+              label="Password agian"
+              type="password"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="grey" @click="dialog.register = false">Cancel</v-btn>
+          <v-btn color="success" class="mr-5" @click="dialog.register = false"
+            >Register</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- password change dialog -->
+    <v-dialog v-model="dialog.pwdchg" max-width="600">
+      <v-card class="elevation-12">
+        <v-toolbar color="warning" dark flat>
+          <v-toolbar-title>Password change form</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              prepend-icon="mdi-lock"
+              name="old_password"
+              label="Old_Password"
+              type="password"
+            ></v-text-field>
+            <v-text-field
+              prepend-icon="mdi-lock"
+              name="new_password1"
+              label="New_Password1"
+              type="password"
+            ></v-text-field>
+            <v-text-field
+              prepend-icon="mdi-lock"
+              name="new_password2"
+              label="New_Password2"
+              type="password"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="grey" @click="dialog.pwdchg = false">Cancel</v-btn>
+          <v-btn color="warning" class="mr-5" @click="dialog.pwdchg = false"
+            >Password change</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -100,7 +182,11 @@
 export default {
   data: () => ({
     drawer: null,
-    dialog: false,
+    dialog: {
+      login: false,
+      register: false,
+      pwdchg: false,
+    },
     items: [
       { title: "Dashboard", icon: "mdi-view-dashboard" },
       { title: "Photos", icon: "mdi-image" },
