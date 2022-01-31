@@ -29,13 +29,67 @@
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <!-- <template v-slot:item.actions="{ item }"> -->
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small class="mr-2" @click.stop="dialogOpen('update', item)"
+          >mdi-pencil</v-icon
+        >
+        <v-icon small @click.stop="deletePost(item)">mdi-delete</v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="fetchPostList"> Reset </v-btn>
+        <v-btn color="primary" @click="fetchPostList">Reset</v-btn>
       </template>
     </v-data-table>
+
+    <v-dialog v-model="dialog" max-width="800px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ formTitle }}</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-form id="post-form" ref="postForm">
+            <v-text-field
+              label="ID"
+              name="id"
+              v-model="editedItem.id"
+              readonly
+            ></v-text-field>
+            <v-text-field
+              label="TITLE"
+              name="title"
+              v-model="editedItem.title"
+            ></v-text-field>
+            <v-text-field
+              label="DESCRIPTION"
+              name="description"
+              v-model="editedItem.description"
+            ></v-text-field>
+            <v-textarea
+              outlined
+              label="CONTENT"
+              name="content"
+              v-model="editedItem.content"
+            ></v-textarea>
+            <v-text-field
+              label="OWNER"
+              name="owner"
+              v-model="editedItem.owner"
+              readonly
+            ></v-text-field>
+            <v-text-field
+              label="TAGS"
+              name="tags"
+              v-model="editedItem.tags"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -62,36 +116,18 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     posts: [],
-    tagname: '',
+    tagname: "",
     editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-    defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
+    editedItem: {},
+    defaultItem: {},
+    actionKind: '',
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
+      // return this.editedIndex === -1 ? "New Item" : "Update Item";
+      if (this.actionKind === 'create') return 'New Item';
+      else return 'Update Item';
     },
   },
 
@@ -121,58 +157,40 @@ export default {
         });
     },
 
-    serverPage(item){
+    serverPage(item) {
       console.log("serverPage()...", item);
       location.href = `/blog/post/${item.id}/`;
     },
 
-    editItem(item) {
-      this.editedIndex = this.posts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+    dialogOpen(actionKind, item) {
+      console.log("dialogopen()...", actionKind, item);
+      this.actionKind = actionKind;
+      if (actionKind === "create") {
+        this.editedIndex = -1;
+        this.editedItem = {};
+      } else {
+        this.editedIndex = this.posts.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+      }
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.editedIndex = this.posts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
-    close() {
+    cancel() {
+      console.log("cancel()...");
       this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      }
-      this.close();
+      console.log("cancel()...");
+      this.dialog = false;
     },
+
   },
 };
 </script>
 
 <style scoped>
-.v-data-table >>> tbody > tr  {
+.v-data-table >>> tbody > tr {
   cursor: pointer;
 }
 </style>
