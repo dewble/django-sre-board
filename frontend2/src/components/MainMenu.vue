@@ -170,7 +170,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text color="grey" @click="cancel('pwdchg')">Cancel</v-btn>
-          <v-btn color="warning" class="mr-5" @click="cancel('pwdchg')"
+          <v-btn color="warning" class="mr-5" @click="save('pwdchg')"
             >Password change</v-btn
           >
         </v-card-actions>
@@ -243,6 +243,7 @@ export default {
     },
     login() {
       console.log("login()...");
+      // FormData 가져오기
       const postData = new FormData(document.getElementById("login-form"));
       axios
         .post("/api/login/", postData)
@@ -280,11 +281,27 @@ export default {
         .then((res) => {
           console.log("LOGOUT GET RES", res);
           alert(`user ${this.me.username} logout success`);
-          this.me = { username: 'Anonymos' };
+          this.me = { username: "Anonymous" };
         })
         .catch((err) => {
-          console.log("LOGOUT ERR.RESPONSE", err.response);
+          console.log("LOGOUT GET ERR.RESPONSE", err.response);
           alert("user logout fail");
+        });
+    },
+
+    pwdchg() {
+      console.log("pwdchg()...");
+      // FormData 가져오기
+      const postData = new FormData(document.getElementById("pwdchg-form"));
+      axios
+        .post("/api/pwdchg/", postData)
+        .then((res) => {
+          console.log("PWDCHG POST RES", res);
+          alert(`user ${this.me.username} password change success`);
+        })
+        .catch((err) => {
+          console.log("PWDCHG POST ERR.RESPONSE", err.response);
+          alert("user password change fail");
         });
     },
   },
