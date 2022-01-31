@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, get_user_model
 from django.contrib.auth.views import LoginView
 from django.db.models import Count
 from django.http import JsonResponse
@@ -6,9 +6,11 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.generic.detail import BaseDetailView
+from django.views.generic.edit import BaseCreateView
 from django.views.generic.list import BaseListView
 from taggit.models import Tag
 
+from accounts.forms import MyUserCreationForm
 from api.views_util import obj_to_post, prev_next_post, make_tag_cloud
 
 from blog.models import Post
@@ -83,10 +85,27 @@ class ApiLoginView(LoginView):
         # userDict = vars(user)
         # del userDict['_state'], userDict['password']
         userDict = {
-            'id' : user.id,
-            'username' : user.username
+            'id': user.id,
+            'username': user.username
         }
         return JsonResponse(data=userDict, safe=True, status=200)
+
+    def form_invalid(self, form):
+        return JsonResponse(data=form.errors, safe=True, status=400)
+
+
+class ApiRegisterView(BaseCreateView):
+    # model = get_user_model()
+    # fields = '__all__'
+    form_class = MyUserCreationForm
+
+    def form_valid(self, form):
+        self.object = form.save()
+        userDict = {
+            'id': self.object.id,
+            'username': self.object.username,
+        }
+        return JsonResponse(data=userDict, safe=True, status=201)
 
     def form_invalid(self, form):
         return JsonResponse(data=form.errors, safe=True, status=400)

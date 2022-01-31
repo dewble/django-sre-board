@@ -103,38 +103,33 @@
       <v-card class="elevation-12">
         <v-toolbar color="success" dark flat>
           <v-toolbar-title>Register form</v-toolbar-title>
-          <v-spacer></v-spacer>
         </v-toolbar>
-
         <v-card-text>
           <v-form id="register-form" ref="registerForm">
             <v-text-field
-              prepend-icon="mdi-account"
-              name="username1"
               label="Username"
+              name="username"
+              prepend-icon="mdi-account"
               type="text"
             ></v-text-field>
             <v-text-field
-              prepend-icon="mdi-lock"
-              name="password1"
               label="Password"
+              name="password1"
+              prepend-icon="mdi-lock"
               type="password"
             ></v-text-field>
             <v-text-field
-              prepend-icon="mdi-lock"
+              label="Password again"
               name="password2"
-              label="Password agian"
+              prepend-icon="mdi-lock"
               type="password"
             ></v-text-field>
           </v-form>
         </v-card-text>
-
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="dialog.register = false"
-            >Cancel</v-btn
-          >
-          <v-btn color="success" class="mr-5" @click="dialog.register = false"
+          <v-btn text color="grey" @click="cancel('register')">Cancel</v-btn>
+          <v-btn color="success" class="mr-5" @click="save('register')"
             >Register</v-btn
           >
         </v-card-actions>
@@ -174,8 +169,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="dialog.pwdchg = false">Cancel</v-btn>
-          <v-btn color="warning" class="mr-5" @click="dialog.pwdchg = false"
+          <v-btn text color="grey" @click="cancel('pwdchg')">Cancel</v-btn>
+          <v-btn color="warning" class="mr-5" @click="cancel('pwdchg')"
             >Password change</v-btn
           >
         </v-card-actions>
@@ -217,7 +212,6 @@ export default {
         this.dialog.pwdchg = true;
       }
     },
-    
     cancel(kind) {
       console.log("cancel()...", kind);
       if (kind === "login") {
@@ -244,7 +238,7 @@ export default {
       } else if (kind === "pwdchg") {
         this.pwdchg();
         this.dialog.pwdchg = false;
-        this.$refs.lpwdchgForm.reset();
+        this.$refs.pwdchgForm.reset();
       }
     },
     login() {
@@ -262,6 +256,23 @@ export default {
           alert("login error");
         });
     },
+
+    register() {
+      console.log("login()...");
+      const postData = new FormData(document.getElementById("register-form"));
+      axios
+        .post("/api/register/", postData)
+        .then((res) => {
+          console.log("REGISTER POST RES", res);
+          alert(`user ${res.data.username} create success`);
+          // this.me = res.data;
+        })
+        .catch((err) => {
+          console.log("REGISTER POST ERR.RESPONSE", err.response);
+          alert("user register fail");
+        });
+    },
+
   },
 };
 </script>
