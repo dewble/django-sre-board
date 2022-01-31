@@ -201,6 +201,11 @@ export default {
     ],
   }),
 
+  created() {
+    this.getUserInfo();
+
+  },
+
   methods: {
     dialogOpen(kind) {
       console.log("dialogOpen()...", kind);
@@ -302,6 +307,20 @@ export default {
         .catch((err) => {
           console.log("PWDCHG POST ERR.RESPONSE", err.response);
           alert("user password change fail");
+        });
+    },
+
+    getUserInfo() {
+      console.log("getUserInfo()...");
+      axios
+        .get("/api/me/")
+        .then((res) => {
+          console.log("GETUSERINFO GET RES", res);
+          this.me = res.data;
+        })
+        .catch((err) => {
+          console.log("GETUSERINFO GET ERR.RESPONSE", err.response);
+          alert(err.response.status + " " + err.response.statusText);
         });
     },
   },
