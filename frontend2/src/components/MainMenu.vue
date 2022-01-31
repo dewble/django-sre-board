@@ -52,7 +52,7 @@
             </v-list-item>
           </template>
           <template v-else>
-            <v-list-item>
+            <v-list-item @click="logout">
               <v-list-item-title>Logout</v-list-item-title>
             </v-list-item>
             <v-list-item @click="dialogOpen('pwdchg')">
@@ -273,6 +273,20 @@ export default {
         });
     },
 
+    logout() {
+      console.log("logout()..");
+      axios
+        .get("/api/logout/")
+        .then((res) => {
+          console.log("LOGOUT GET RES", res);
+          alert(`user ${this.me.username} logout success`);
+          this.me = { username: 'Anonymos' };
+        })
+        .catch((err) => {
+          console.log("LOGOUT ERR.RESPONSE", err.response);
+          alert("user logout fail");
+        });
+    },
   },
 };
 </script>
