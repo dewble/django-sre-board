@@ -12,6 +12,8 @@ from taggit.models import Tag
 from api.views_util import obj_to_post, prev_next_post, make_tag_cloud
 
 from blog.models import Post
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 '''
 data = 클라이언트에 보낼 데이터 인자를 대입
@@ -19,15 +21,17 @@ safe = 우리가 보내려고 하는 데이터(postlist)가 딕셔너리 일경�
 status = 응답코드
 '''
 
+
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class ApiPostLV(BaseListView):
     # model = Post
 
     def get_queryset(self):
         tagname = self.request.GET.get('tagname')
         if tagname:
-            qs = Post.objects.filter(tags__name=tagname) # POST table에서 tags 칼럼중 name이 tagname인 칼럼을 가져오라
+            qs = Post.objects.filter(tags__name=tagname)  # POST table에서 tags 칼럼중 name이 tagname인 칼럼을 가져오라
         else:
-            qs = Post.objects.all() ## name이 해당하지 않을 경우 전체를 불러오라
+            qs = Post.objects.all()  ## name이 해당하지 않을 경우 전체를 불러오라
         return qs
 
     def render_to_response(self, context, **response_kwargs):
@@ -36,6 +40,7 @@ class ApiPostLV(BaseListView):
         postList = [obj_to_post(obj) for obj in qs]
 
         return JsonResponse(data=postList, safe=False, status=200)
+
 
 class ApiPostDV(BaseDetailView):
     model = Post
@@ -48,9 +53,11 @@ class ApiPostDV(BaseDetailView):
         post['prev'], post['next'] = prev_next_post(obj)
         return JsonResponse(data=post, safe=True, status=200)
 
+
 class ApiTagCloudLV(BaseListView):
     # model = Tag
     queryset = Tag.objects.annotate(count=Count('post'))
+
     # def get_queryset(self):
     #     return Tag.objects.all()
 
@@ -73,8 +80,12 @@ class ApiLoginView(LoginView):
         """Security check complete. Log the user in."""
         user = form.get_user()
         login(self.request, form.get_user())
-        userDict= vars(user)
-        del userDict['_state'], userDict['password']
+        # userDict = vars(user)
+        # del userDict['_state'], userDict['password']
+        userDict = {
+            'id' : user.id,
+            'username' : user.username
+        }
         return JsonResponse(data=userDict, safe=True, status=200)
 
     def form_invalid(self, form):
