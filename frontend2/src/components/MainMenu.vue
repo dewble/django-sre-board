@@ -181,6 +181,7 @@
 
 <script>
 import axios from "axios";
+import EventBus from "./event_bus";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -201,9 +202,15 @@ export default {
     ],
   }),
 
+  watch: {
+    me(newVal, oldVal) {
+      console.log("watch.me()...", newVal, oldVal); // me() 변수의 값이 바뀔때마다 함수를 실행하라
+      EventBus.$emit("me_change", newVal);
+    },
+  },
+
   created() {
     this.getUserInfo();
-
   },
 
   methods: {

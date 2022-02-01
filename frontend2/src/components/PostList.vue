@@ -95,6 +95,7 @@
 
 <script>
 import axios from "axios";
+import EventBus from './event_bus';
 
 export default {
   name: "HelloWorld",
@@ -120,22 +121,29 @@ export default {
     editedIndex: -1,
     editedItem: {},
     defaultItem: {},
-    actionKind: '',
+    actionKind: "",
+    me: { username: "Anonymous" },
   }),
 
   computed: {
     formTitle() {
       // return this.editedIndex === -1 ? "New Item" : "Update Item";
-      if (this.actionKind === 'create') return 'New Item';
-      else return 'Update Item';
+      if (this.actionKind === "create") return "New Item";
+      else return "Update Item";
     },
   },
 
   created() {
     const params = new URL(location).searchParams;
+    // const paramTag = params.get('tagname');
     this.tagname = params.get("tagname");
     this.fetchPostList();
+
+    EventBus.$on("me_change", (val) => {
+      this.me = val;
+    });
   },
+
 
   methods: {
     fetchPostList() {
@@ -182,9 +190,57 @@ export default {
 
     save() {
       console.log("cancel()...");
+      if (this.actionKind === "create") this.createPost();
+      else this.updatePost();
       this.dialog = false;
     },
 
+    createPost() {
+      console.log("createPost()...");
+      const postData = new FormData(document.getElementById("post-form"));
+      axios
+        .post("/api/post/create/", postData)
+        .then((res) => {
+          console.log("CREATE POST POST RES", res);
+          this.posts.push(res.data);
+        })
+        .catch((err) => {
+          console.log("CREATE POST POST ERR.RESPONSE", err.response);
+          alert(err.response.status + " " + err.response.statusText);
+        });
+    },
+
+    updatePost() {
+      console.log("updatePost()...");
+      const postData = new FormData(document.getElementById("post-form"));
+      postData.set('owner', this.me.id);
+      axios
+        .post(`/api/post/${this.editedItem.id}/update/`, postData)
+        .then((res) => {
+          console.log("UPDATE POST POST RES", res);
+          this.posts.splice(this.editedIndex, 1, res.data);
+        })
+        .catch((err) => {
+          console.log("UPDATE POST POST ERR.RESPONSE", err.response);
+          alert(err.response.status + " " + err.response.statusText);
+        });
+    },
+
+    deletePost(item) {
+      console.log("deleteItem()...", item);
+      if (!confirm("Are you sure to delete?")) return;
+      axios
+        .delete(`/api/post/${item.id}/delete`)
+        .then((res) => {
+          console.log("DELETE POST DELETE RES", res);
+          const index = this.posts.indexOf(item);
+          this.posts.splice(index, 1);
+        })
+        .catch((err) => {
+          console.log("DELETE POST DELETE ERR.RESPONSE", err.response);
+          alert(err.response.status + " " + err.response.statusText);
+        });
+    },
   },
 };
 </script>
