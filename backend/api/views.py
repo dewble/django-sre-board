@@ -172,3 +172,16 @@ class ApiPostUV(BaseUpdateView):
 
     def form_invalid(self, form):
         return JsonResponse(data=form.errors, safe=True, status=400)
+
+
+class ApiPostDelV(BaseDetailView):
+    model = Post
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL.
+        """
+        self.object = self.get_object()
+        self.object.delete()
+        return JsonResponse(data={}, safe=True, status=204)
+
