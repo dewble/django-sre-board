@@ -13,6 +13,7 @@ from django.views.generic.list import BaseListView
 from taggit.models import Tag
 
 from accounts.forms import MyUserCreationForm
+from accounts.views import MyLoginRequiredMixin, OwnerOnlyMixin
 from api.views_util import obj_to_post, prev_next_post, make_tag_cloud
 
 from blog.models import Post
@@ -146,7 +147,7 @@ class ApiMeView(View):
         return JsonResponse(data=userDict, safe=True, status=200)
 
 
-class ApiPostCV(BaseCreateView):
+class ApiPostCV(MyLoginRequiredMixin, BaseCreateView):
     model = Post
     fields = '__all__'
 
@@ -160,7 +161,7 @@ class ApiPostCV(BaseCreateView):
         return JsonResponse(data=form.errors, safe=True, status=400)
 
 
-class ApiPostUV(BaseUpdateView):
+class ApiPostUV(OwnerOnlyMixin, BaseUpdateView):
     model = Post
     fields = '__all__'
 
@@ -174,7 +175,7 @@ class ApiPostUV(BaseUpdateView):
         return JsonResponse(data=form.errors, safe=True, status=400)
 
 
-class ApiPostDelV(BaseDetailView):
+class ApiPostDelV(OwnerOnlyMixin, BaseDetailView):
     model = Post
     def delete(self, request, *args, **kwargs):
         """
