@@ -16,7 +16,7 @@ from accounts.forms import MyUserCreationForm
 from accounts.views import MyLoginRequiredMixin, OwnerOnlyMixin
 from api.views_util import obj_to_post, prev_next_post, make_tag_cloud
 
-from blog.models import Post
+from api.models import Post
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 

@@ -23,5 +23,4 @@ urlpatterns = [
 
     path('', views.HomeView.as_view(), name='home'),
     path('api/', include('api.urls')),
-    path('blog/', include('blog.urls')),
 ]

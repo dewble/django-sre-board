@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'taggit',
     'api.apps.ApiConfig',
     'accounts.apps.AccountsConfig',  # blog.apps.py 에서 정의
-    'blog.apps.BlogConfig',  # blog.apps.py 에서 정의
-
 ]
 
 MIDDLEWARE = [
