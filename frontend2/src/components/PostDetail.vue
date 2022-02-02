@@ -70,16 +70,19 @@
 import axios from "axios";
 
 export default {
-  name: "HelloWorld",
+  // name: "HelloWorld",
 
   data: () => ({
     post: {},
-    tagCloud: {},
+    tagCloud: [],
   }),
 
   created() {
     console.log("created()...");
-    const postId = location.pathname.split('/')[3] || 2; 
+    // const postId = location.pathname.split('/')[3] || 2; 
+    // const postId = location.pathname.split('/')[3]; 
+    const params = new URL(location).searchParams;
+    const postId = params.get('id')
     this.fetchPostDetail(postId);
     this.fetchTagCloud();
   },
@@ -108,7 +111,7 @@ export default {
           this.tagCloud = res.data;
           // tag.weight
           this.tagCloud.forEach((element) => {
-            if (element.weight === 5) element.color = "purple";
+            if (element.weight === 5) element.color = "red";
             else if (element.weight === 4) element.color = "blue";
             else if (element.weight === 3) element.color = "green";
             else if (element.weight === 2) element.color = "blue-grey";
@@ -116,14 +119,15 @@ export default {
           });
         })
         .catch((err) => {
-          console.log("TAG CLOUD GET ERR>.RESPONSE", err.response);
+          console.log("TAG CLOUD GET ERR.RESPONSE", err.response);
           alert(err.response.status + " " + err.response.statusText);
         });
     },
 
     serverPage(tagname) {
       console.log("serverPage()...", tagname);
-      location.href = `/blog/post/list/?tagname=${tagname}`;
+      // location.href = `/blog/post/list/?tagname=${tagname}`;
+      location.href = `/post_list.html?tagname=${tagname}`;
     }
   },
 };

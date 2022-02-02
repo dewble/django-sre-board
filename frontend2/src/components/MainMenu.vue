@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- drawer -->
-    <v-navigation-drawer v-model="drawer" app clipped>
+    <!-- <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense nav>
         <v-list-item v-for="item in items" :key="item.title" link>
           <v-list-item-icon>
@@ -13,7 +13,27 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-list dense>
+        <v-list-item link>
+          <v-list-item-action>
+            <v-icon>mdi-view-dashboard</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Dashboard</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link>
+          <v-list-item-action>
+            <v-icon>mdi-cog</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Settings</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>    
 
     <!-- app-bar -->
     <v-app-bar app clipped-left color="indigo" dark>
@@ -24,11 +44,11 @@
       <v-spacer></v-spacer>
 
       <v-btn text href="/">HOME</v-btn>
-      <v-btn text href="/blog/post/list">Blog</v-btn>
+      <v-btn text href="/post_list.html">Blog</v-btn>
       <v-btn text href="/admin">Admin</v-btn>
 
-      <v-btn text href="/post_list.html">POST LIST</v-btn>
-      <v-btn text href="/post_detail.html">POST Detail</v-btn>
+      <!-- <v-btn text href="/post_list.html">POST LIST</v-btn>
+      <v-btn text href="/post_detail.html">POST Detail</v-btn> -->
 
       <v-spacer></v-spacer>
 
@@ -195,11 +215,11 @@ export default {
       pwdchg: false,
     },
     me: { username: "Anonymous" },
-    items: [
-      { title: "Dashboard", icon: "mdi-view-dashboard" },
-      { title: "Photos", icon: "mdi-image" },
-      { title: "About", icon: "mdi-help-box" },
-    ],
+    // items: [
+    //   { title: "Dashboard", icon: "mdi-view-dashboard" },
+    //   { title: "Photos", icon: "mdi-image" },
+    //   { title: "About", icon: "mdi-help-box" },
+    // ],
   }),
 
   watch: {

@@ -6,13 +6,24 @@ module.exports = {
   ],
 
   devServer: {
-    index: 'home.html', 
-    proxy: 'http://127.0.0.1:8000', // xhr only
+    index: 'home.html',
+    proxy: {
+      '^/api': {
+        target: 'http://127.0.0.1:8000',
+      },
+      '^/admin': {
+        target: 'http://127.0.0.1:8000',
+      },
+      '^/static': {
+        target: 'http://127.0.0.1:8000',
+      }
+    }
   },
+
 
   outputDir: 'dist',
   publicPath: '/',
-  assetsDir: 'static',
+  assetsDir: '',
 
   pages: {
 
@@ -38,12 +49,15 @@ module.exports = {
     },
 
     post_detail: {
-      entry: 'src/pages/main_post_detail.js', 
+      entry: 'src/pages/main_post_detail.js',
       template: 'public/index.html',
       filename: 'post_detail.html',
-      title: 'Vuedjangoblog/post_detail.html', 
+      title: 'Vuedjangoblog/post_detail.html',
       minify: false,
     },
-
   },
+
+  css: {
+    extract: { ignoreOrder: true },
+  }
 }
