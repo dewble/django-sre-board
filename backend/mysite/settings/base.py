@@ -27,7 +27,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 #ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -133,7 +132,10 @@ STATIC_URL = '/static/'
 
 # 아래에서 지정하는 project static dir, 1순위로 찾아본다
 # 2순위로 각 앱 폴더 하위의 static 폴더를 찾아보게 된다
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -145,4 +147,4 @@ TAGGIT_CASE_INSENSITIVE = True
 AUTH_USER_MODEL = 'accounts.User' ## 테이블 등록할 땐 app 이름과 모델이름을 같이 써주면 된다
 
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080','*']

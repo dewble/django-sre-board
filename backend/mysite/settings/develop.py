@@ -5,7 +5,7 @@ SECRET_KEY = 'django-insecure-h^@rpdw7(35j5(q)tpfk-d4t6w!hmo^$&8kpqdyw^pb1^o2chv
 DEBUG = True
 
 ## 개발모드에서는 공백으로 둘 수 있다
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     # 'default': {

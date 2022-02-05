@@ -1,0 +1,7 @@
+asgiref==3.4.1
+Django==4.0.1
+django-taggit==2.1.0
+mysqlclient==2.1.0
+PyMySQL==1.0.2
+sqlparse==0.4.2
+uWSGI==2.0.20
