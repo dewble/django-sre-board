@@ -1,4 +1,4 @@
-#!/Users/dewble/Workspace/python/django/django-board/backend/venv/bin/python
+#!/Users/dewble/Workspace/python/django/django-sre-board/backend/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
