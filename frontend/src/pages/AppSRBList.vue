@@ -8,17 +8,17 @@
 
     <!-- footer -->
     <v-footer app>
-      <span>&copy; 2022</span>
+      <span>&copy; 2022 Jongmin Han</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
 import MainMenu from "../components/MainMenu.vue"
-import HelloWorld from "../components/HelloWorld.vue";
+import SRBList from "../components/SRBList.vue";
 
 export default {
-  components: { MainMenu ,HelloWorld },
+  components: { MainMenu ,SRBList },
   data: () => ({
     // drawer: null,
     // items: [

@@ -9,13 +9,13 @@ module.exports = {
     index: 'home.html',
     proxy: {
       '^/api': {
-        target: 'http://127.0.0.1:8000',
+        target: 'http://127.0.0.1:8080',
       },
       '^/admin': {
-        target: 'http://127.0.0.1:8000',
+        target: 'http://127.0.0.1:8080',
       },
       '^/static': {
-        target: 'http://127.0.0.1:8000',
+        target: 'http://127.0.0.1:8080',
       }
     }
   },
