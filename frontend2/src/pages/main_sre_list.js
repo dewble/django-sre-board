@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import AppSRBList from './AppSRBList.vue'
+import AppSRBList from './AppSREList.vue'
 import vuetify from '../plugins/vuetify'
 
 Vue.config.productionTip = false

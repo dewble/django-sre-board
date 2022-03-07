@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import AppSRBList from './AppSRBList.vue'
+import AppSRBDetail from './AppSREDetail.vue'
 import vuetify from '../plugins/vuetify'
 
 Vue.config.productionTip = false
 
 new Vue({
   vuetify,
-  render: h => h(AppSRBList)
+  render: h => h(AppSRBDetail)
 }).$mount('#app')
